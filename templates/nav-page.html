@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}
+
+    {% endblock %}
+    </title>
+{% block head %}
+
+{% endblock %}
+
+    <link rel="stylesheet" href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/commons.css">
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">博客园-大家的博客</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                {% if not main_info.type_id %}
+                <li class="active"><a href="/">全部<span class="sr-only">(current)</span></a></li>
+                {% else %}
+                 <li><a href="/">全部<span class="sr-only">(current)</span></a></li>
+                {% endif %}
+
+                {% for article_type in main_info.article_type_list %}
+                    {% if main_info.type_id == article_type.0 %}
+                     <li class="active"><a href="/blog_mainpage/{{ article_type.0 }}">{{ article_type.1 }}</a></li>
+                    {% else %}
+                    <li><a href="/blog_mainpage/{{ article_type.0 }}">{{ article_type.1 }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+{#                <li><a href="/blog_mainpage/1">Python</a></li>#}
+{#                <li><a href="/blog_mainpage/2">GOlang</a></li>#}
+{#                <li><a href="/blog_mainpage/3">Linux</a></li>#}
+{#                <li><a href="/blog_mainpage/4">OpenStack</a></li>#}
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if  main_info.blog.title %}
+                 <li><a href="/my_blog/{{ main_info.blog.subtitle }}">{{ main_info.blog.title }}</a></li>
+                {% else %}
+                    <li><a href="/login/">登录</a></li>
+                {% endif %}
+                <li><a href="/logout/">退出</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+{% block content %}
+
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+<script src="/static/jquery-3.2.1.js"></script>
+<script src="/static/plugins/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+<script>
+    $('.collapse').collapse()
+</script>
+
+{% block js %}
+
+{% endblock %}
+</body>
+</html>

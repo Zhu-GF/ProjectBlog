@@ -1,0 +1,75 @@
+{% extends 'personal_blog-father.html' %}
+
+{% block content %}
+<div>
+<h3>大分类：
+        {% if kwargs.article_type_id == 0 %}
+            <a class="active" href="/search-0-{{ kwargs.category_id }}-{{ kwargs.articles2tag__tag_id }}">全部</a>
+        {% else %}
+            <a href="/search-0-{{ kwargs.category_id }}-{{ kwargs.articles2tag__tag_id }}">全部</a>
+        {% endif %}
+        {% for row in type_list %}
+            {% if row.0 == kwargs.article_type_id %}
+                <a class="active" href="/search-{{ row.0 }}-{{ kwargs.category_id }}-{{ kwargs.articles2tag__tag_id }}">{{ row.1 }}</a>
+            {% else %}
+                <a  href="/search-{{ row.0 }}-{{ kwargs.category_id }}-{{ kwargs.articles2tag__tag_id }}">{{ row.1 }}</a>
+            {% endif %}
+        {% endfor %}
+</h3>
+<h3>小分类： {% if kwargs.category_id == 0 %}
+            <a class="active" href="/search-{{ kwargs.article_type_id }}-0-{{ kwargs.articles2tag__tag_id }}">全部</a>
+        {% else %}
+            <a href="/search-{{ kwargs.article_type_id }}-0-{{ kwargs.articles2tag__tag_id }}">全部</a>
+        {% endif %}
+        {% for row in category_list %}
+            {% if row.cid == kwargs.category_id %}
+                <a class="active" href="/search-{{ kwargs.article_type_id }}-{{ row.cid }}-{{ kwargs.articles2tag__tag_id }}">{{ row.title }}</a>
+            {% else %}
+                <a  href="/search-{{ kwargs.article_type_id }}-{{ row.cid }}-{{ kwargs.articles2tag__tag_id }}">{{ row.title }}</a>
+            {% endif %}
+        {% endfor %}</h3>
+<h3>标签分类:
+  {% if kwargs.articles2tag__tag_id == 0 %}
+            <a class="active" href="/search-{{ kwargs.article_type_id }}-{{ kwargs.category_id }}-0">全部</a>
+        {% else %}
+           <a href="/search-{{ kwargs.article_type_id }}-{{ kwargs.category_id }}-0">全部</a>
+        {% endif %}
+        {% for row in tags_list %}
+            {% if row.tags_id == kwargs.articles2tag__tag_id %}
+                <a class="active" href="/search-{{ kwargs.article_type_id }}-{{ kwargs.category_id }}-{{ row.tid }}">{{ row.title }}</a>
+            {% else %}
+            <a href="/search-{{ kwargs.article_type_id }}-{{ kwargs.category_id }}-{{ row.tid }}">{{ row.title }}</a>
+            {% endif %}
+        {% endfor %}
+</h3>
+</div>
+
+
+    {% for article in main_info.article_list %}
+    <div>
+    <h3>
+        <a href="/article_page/{{ article.aid }}">{{ article.title  }}</a>
+    </h3>
+        <span>{{ article.abstract }}</span>
+    <span>{{ article.like_count }}</span>
+    <span>{{ article.dislike_count }}</span>
+        <br>
+    <span>{{ article.release_time }}</span>
+        <a href="/edite_article/{{ article.aid }}">编辑</a>
+    <a href="/delete_article/{{ article.aid }}">删除</a>
+
+    </div>
+    {% endfor %}
+
+    <br>
+
+
+
+{% endblock %}
+
+{% block style %}
+    <style>
+    .active{background-color: #2aabd2}
+
+    </style>
+{% endblock %}

@@ -1,0 +1,194 @@
+{% extends 'personal_blog-father.html' %}
+
+{% block content %}
+<table>
+<tr><th>标签名</th></tr>
+  {% for tag in main_info.tags_list %}
+<tr>
+    <td>{{ tag.tid }}</td>
+    <td class="tag_title">{{ tag.title }}</td>
+<td>
+        <button type="button" class="btn btn-primary update_mywork" data-toggle="modal" data-target="#exampleModal1" data-whatever="@mdo" style="float: right;margin-top: 15px;margin-right: 10px;font-size: 12px;">修改标签</button>
+</td>
+<td><button type="button" class="btn btn-primary"  style="float: right;margin-top: 15px;margin-right: 10px;font-size: 12px;" onclick="delete_tag(this);">删除</button></td>
+
+</tr>
+
+    {% endfor %}
+
+<tr><th>分类名</th></tr>
+{% for category in main_info.category %}
+<tr>
+    <td>{{ category.cid }}</td>
+    <td >{{ category.title }}</td>
+<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2" data-whatever="@mdo" style="float: right;margin-top: 15px;margin-right: 10px;font-size: 12px;">修改分类</button></td>
+<td><button type="button" class="btn btn-primary"  style="float: right;margin-top: 15px;margin-right: 10px;font-size: 12px;" onclick="delete_category(this);">删除</button></td>
+
+</tr>
+{% endfor %}
+</table>
+    <br>
+
+    <form action="" method="post" novalidate>
+    {% csrf_token %}
+    <input type="text" value="tag_type" name="type">
+    添加标签 {{ main_info.tags_form.tag}}  {{ main_info.tags_form.errors.tag.0}} <input type="submit" value="添加">
+    </form>
+    <br>
+    <form action="" method="post" novalidate>
+        {% csrf_token %}
+     <input type="text" value="category_type" name="type">
+    添加分类 {{ main_info.category_form.category}}  {{ main_info.category_form.errors.category.0}} <input type="submit" value="添加">
+    </form>
+
+    {#按钮模态对话框部分#}
+{#        1.修改标签#}
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">修改标签</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+            {% csrf_token %}
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">标签内容:</label>
+            <input type="text" class="form-control tag_item" id="recipient-name">
+              <input type="text" class="tag_id" name="tag_id">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary save_update" onclick="uploda_tag_data();">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{#    2.修改分类#}
+        <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">修改分类</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+            {% csrf_token %}
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">分类内容:</label>
+            <input type="text" class="form-control category_item" id="recipient-name">
+              <input type="text" class="category_id">
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary" onclick="upload_category_data();">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+{% block js %}
+    <script>
+    $('#exampleModal1').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var modal = $(this);
+        modal.find('.tag_item').val(button.parent().prev().text());
+        modal.find('.tag_id').val(button.parent().prev().prev().text());
+
+    });
+    $('#exampleModal2').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget); // Button that triggered the modal
+  var modal = $(this);
+  modal.find('.category_item').val(button.parent().prev().text());
+  modal.find('.category_id').val(button.parent().prev().prev().text());
+
+});
+    function uploda_tag_data() {
+        $.ajax({
+            url: '/edit_tag/',
+            type: 'POST',
+            dataType:"JSON",
+            data: {
+                'tid': $('.tag_id').val(),
+                'title': $('.tag_item').val(),
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            success: function (args) {
+                if (args['status']==false)
+                {alert('更新失败，请输入内容')}
+            }
+
+        });
+        location.reload();
+    }
+    function upload_category_data() {
+        $.ajax({
+            url: '/edit_category/',
+            type: 'POST',
+            dataType:"JSON",
+            data: {
+                'cid': $('.category_id').val(),
+                'title': $('.category_item').val(),
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            success: function (args) {
+                if (args['status']==false)
+                {alert('更新失败，请输入内容')}
+            }
+
+        });
+        location.reload();
+    }
+
+        function delete_tag(thiss) {
+        console.log($(thiss).parent().siblings().eq(0).text());
+        $.ajax({
+            url: '/delete_tag/',
+            type: 'POST',
+            dataType:"JSON",
+            data: {
+                'tid': $(thiss).parent().siblings().eq(0).text(),
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            success: function (args) {
+                if (args['status']==false)
+                {alert('与博文关联，删除失败')}
+            }
+
+        });
+        location.reload();
+    }
+
+
+        function delete_category(thiss) {
+        console.log($(thiss).parent().siblings().eq(0).text());
+        $.ajax({
+            url: '/delete_category/',
+            type: 'POST',
+            dataType:"JSON",
+            data: {
+                'cid': $(thiss).parent().siblings().eq(0).text(),
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            success: function (args) {
+                if (args['status']==false)
+                {alert('与博文关联，删除失败')}
+            }
+
+        });
+{#        location.reload();#}
+    }
+    </script>
+{% endblock %}

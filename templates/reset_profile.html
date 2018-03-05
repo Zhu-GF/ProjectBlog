@@ -1,0 +1,116 @@
+{% extends 'personal_blog-father.html' %}
+
+{% block content %}
+<div style="margin-top: 100px;width: 400px;margin-left: 400px">
+
+    <h3 style="text-align: center">修改个人信息</h3>
+    <form class="form-horizontal" novalidate method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="user_avatar_upload" style="position: absolute">
+            <img src="/static/pictures/1.jpg" alt="..." class="img-thumbnail img_avatar"
+                 style="width: 100px;height: 100px;position: relative;right: -460px;">
+            {{ register_form.avatar }} {{ register_form.errors.avatar.0 }}
+        </div>
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-3 control-label">用户名</label>
+            <div class="col-sm-9">
+                {#      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">#}
+                {{ register_form.username }} {{ register_form.errors.username.0 }}
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-3 control-label">昵称</label>
+            <div class="col-sm-9">
+                {#      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">#}
+                {{ register_form.nickname }} {{ register_form.errors.nickname.0 }}
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-3 control-label">邮箱</label>
+            <div class="col-sm-9">
+                {#      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">#}
+                {{ register_form.email }} {{ register_form.errors.email.0 }}
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputPassword3" class="col-sm-3 control-label">密码</label>
+            <div class="col-sm-9">
+                {#      <input type="password" class="form-control" id="inputPassword3" placeholder="Password">#}
+                {{ register_form.password }} {{ register_form.errors.password.0 }}
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputPassword3" class="col-sm-3 control-label">确认密码</label>
+            <div class="col-sm-9">
+                {#      <input type="password" class="form-control" id="inputPassword3" placeholder="Password">#}
+                {{ register_form.password2 }} {{ register_form.errors.password2.0 }}
+
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-3 control-label">验证码</label>
+            <div class="col-sm-5">
+                {#      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">#}
+                {{ register_form.check_code }} {{ register_form.errors.check_code.0 }}
+
+            </div>
+            <div class="col-sm-4">
+                <img onclick="reload_check_code(this);" src="/check_code/" alt="" style="width: 149.16px;height: 34px;"
+                     title="点击刷新" id="code_img">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">注册</button>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="/static/jquery-3.2.1.js"></script>
+<script>
+    function reload_check_code(this_tag) {
+        this_tag.src = this_tag.src + '?';
+    }
+
+    {#一种方式是使用ajax将文件长传到服务器，再从服务器发送到前端，不可取#}
+    {#    利用window.URL.createObjectURL方法#}
+    {#    给input框绑定onchange事件，如果input内容变化，将会触发该函数#}
+
+    {#利用FileReader()对象预览照片#}
+
+    function bindAvatar2() {
+        $('.user_avatar_upload input').change(function () {
+            var reader = new FileReader();
+            {#            创建一个FileReader对象#}
+            var file_obj = $(this)[0].files[0];
+            {#            获取input框里面的文件#}
+            reader.readAsDataURL(file_obj);
+            {#            利用readASDataURL方法，将文件获取成URL#}
+            reader.onload = function () {
+                $('.img_avatar').attr('src', this.result);
+                {#                 将img的src属性赋值成this.result#}
+            }
+        })
+    }
+
+    bindAvatar2();
+
+</script>
+{% endblock %}

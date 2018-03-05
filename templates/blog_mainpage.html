@@ -1,0 +1,52 @@
+{% extends 'nav-page.html' %}
+
+{% block title %}
+    博客网主页
+{% endblock %}
+
+{% block content %}
+    <h2>博客网的博客文章</h2>
+    {% for article in main_info.article_list %}
+
+        <div style="margin-bottom: 40px">
+
+            <h3><a href="/article_page/{{ article.aid }}">{{ article.title }}</a></h3>
+            <img src="/static/pictures/upload/{{ article.blog.user.avatar }}" alt="" style="height: 60px;width: 60px">
+
+            <span>{{ article.abstract }}</span>
+            <p>{{ article.blog.user.username }}</p>
+            <span>{{ article.release_time }}</span>
+            <a onclick="like_dislike(this,{{ article.aid }},1);"><span>赞</span><i>{{ article.like_count }}</i></a>
+            <a onclick="like_dislike(this,{{ article.aid }},0)"><span>踩</span><i>{{ article.dislike_count }}</i></a>
+
+        </div>
+
+    {% endfor %}
+{% endblock %}
+
+{% block js %}
+    <script>
+        function like_dislike(click_this, aid, val) {
+            console.log('点击了+++++');
+            $.ajax({
+                url: '/like/{{ main_info.blog.subtitle }}',
+                data: {'aid': aid, 'val': val, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                type: "POST",
+                dataType: 'JSON',
+                success: function (args) {
+                    if (args.status == "true") {
+                        $(click_this).find('i').text(args.count_num)
+                    } else if (args.status == "false") {
+                        $(click_this).find('i').text(args.count_num)
+                    } else if (args.status == "done") {
+                        alert('您已经操作过了')
+                    }
+                    else if (args.status == "wrong") {
+                        alert('好像出错了')
+                    }
+
+                }
+            })
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'nav-page.html' %}
+
+{% block style %}
+    <style>
+    .comment{
+            margin-left: 20px;
+        }
+    </style>
+
+{% endblock %}
+{% block content %}
+文章最终页
+    <h3>{{ article_obj.title }}</h3>
+    <h5>作者:  {{ article_obj.blog.user.username }}</h5>
+    <div>{{ article_obj.articel_detail.content }}</div>
+    <a onclick="like_dislike(this,{{ article_obj.aid }},1);"><span>赞</span><i>{{ article_obj.like_count }}</i></a>
+    <a onclick="like_dislike(this,{{ article_obj.aid }},0)"><span>踩</span><i>{{ article_obj.dislike_count }}</i></a>
+
+{#评论的输入框#}
+    <div>
+    <input type="text" name="cid" class="cid">
+        <input type="text" name="comment" class="comments">
+    <button onclick="upload_comment();">提交评论</button>
+    </div>
+
+
+
+{#    评论#}
+    {{ comment |safe }}
+{% endblock %}
+
+{% block js %}
+ <script>
+    function like_dislike(click_this,aid,val) {
+
+        $.ajax({
+            url:'/like/{{ main_info.blog.subtitle }}',
+            data:{'aid':aid,'val':val,'csrfmiddlewaretoken':'{{ csrf_token }}'},
+            type:"POST",
+            dataType:'JSON',
+            success:function (args) {
+                if(args.status == "true"){
+                    $(click_this).find('i').text(args.count_num)
+                }else if(args.status=="false"){
+                $(click_this).find('i').text(args.count_num)
+                }else if(args.status=="done")
+                {alert('您已经操作过了')}
+                else if(args.status=="wrong")
+                {alert('好像出错了')}
+
+            }
+        })
+    }
+
+    function input_comment_id(this_button,aid) {
+        $('.cid').val(aid);
+    }
+    function upload_comment () {
+        $.ajax({
+            url:'/add_comment/',
+            type:"POST",
+            data:{'cid':$('.cid').val(),'article_id':'{{ article_obj.aid }}','comment':$('.comments').val(),'csrfmiddlewaretoken':'{{csrf_token}}'},
+            dataType:'JSON',
+            success:function (args) {
+                if (args.status=='false'){
+                alert('请输入评论内容')}
+                else if(args.status=='true'){
+                    location.reload()
+                } else if (args.status=='login'){
+                    alert('请先登录，再评论')
+                }
+            }
+            }
+        )
+    }
+    </script>
+{% endblock %}

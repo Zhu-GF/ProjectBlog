@@ -1,0 +1,20 @@
+{% extends 'personal_blog-father.html' %}
+
+{% block content %}
+   <form action="" method="post" novalidate>
+    {% csrf_token %}
+    文章标题 {{ article_form.title }}  {{ article_form.errors.title.0 }}
+        <br>
+    文章摘要 {{ article_form.abstract }} {{ article_form.errors.abstract.0 }}
+          <br>
+    文章内容  {{ article_form.content }}  {{ article_form.errors.content.0 }}
+          <br>
+    文章分类  {{ article_form.category }} {{ article_form.errors.category.0 }}
+          <br>
+    文章标签  {{ article_form.tag }}  {{ article_form.erros.tag.0 }}
+          <br>
+    文章大分类 {{ article_form.article_type_id }} {{ article_form.errors.article_type_id.0 }}
+      <br>
+        <input type="submit" value="提交">
+    </form>
+{% endblock %}

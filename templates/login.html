@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.css">
+</head>
+<body>
+
+<div style="margin-top: 100px;width: 400px;margin-left: 400px">
+
+    <h3 style="text-align: center">用户登录</h3>
+    <form class="form-horizontal" novalidate method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-3 control-label">用户名</label>
+            <div class="col-sm-9">
+                {#      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">#}
+                {{ login_form.username }}   {{ login_form.errors.username.0 }}
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputPassword3" class="col-sm-3 control-label">密码</label>
+            <div class="col-sm-9">
+                {#      <input type="password" class="form-control" id="inputPassword3" placeholder="Password">#}
+                {{ login_form.password1 }}   {{ login_form.errors.password1.0 }} {{ login_form.non_field_errors }}
+
+            </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-3 control-label">验证码</label>
+                <div class="col-sm-5">
+                    {#      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">#}
+                    {{ login_form.check_code }}  {{ login_form.errors.check_code.0 }}
+
+                </div>
+                <div class="col-sm-4">
+                         <img onclick="reload_check_code(this);" src="/check_code/" alt="" style="width: 149.16px;height: 34px;"  title="点击刷新" id="code_img">
+                    </div>
+                </div>
+
+              <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="remember_status"> 一周免登陆
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default">Sign in</button>
+                    </div>
+                </div>
+</form>
+
+</div>
+
+
+</body>
+<script>
+    function reload_check_code(this_tag) {
+        this_tag .src=this_tag.src+'?';
+    }
+</script>
+</html>

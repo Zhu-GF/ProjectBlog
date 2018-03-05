@@ -1,0 +1,40 @@
+{% extends 'nav-page.html' %}
+
+{#本页是博客网站的首页，按照点赞高低进行排序显示#}
+    <meta charset="UTF-8">
+    {% block title %}
+    博客园-大家的博客主页
+    {% endblock %}
+
+
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="col-md-8">
+{#        这里填充博客文章及相关信息#}
+        <div class="article_list">
+            <div class="article_item"><h3><a href="">励志鸡汤精心熬制</a> </h3>
+                <div class="article-body clearfix">这个是写文章简介的  这个是写文章简介的   这个是写文章简介的   这个是写文章简介的
+                <img src="/static/pictures/1.jpg" alt="博主头像" class="img_area left">
+                </div>
+            </div>
+
+            <div class="author">
+                <span class="glyphicon glyphicon-user"></span>
+                <a>博主</a>
+                <span>2017/1/1发布时间</span>
+                <span class="glyphicon glyphicon-retweet">评论数</span>
+                <span class="glyphicon glyphicon-thumbs-up">点赞数</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+
+

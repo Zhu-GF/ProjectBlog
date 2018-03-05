@@ -1,0 +1,21 @@
+{% extends 'personal_blog-father.html' %}
+
+{% block content %}
+
+    {% for article in main_info.article_list %}
+    <div>
+    <h3>
+        <a href="/article_page/{{ article.aid }}">{{ article.title  }}</a>
+    </h3>
+        <span>{{ article.abstract }}</span>
+    <span>{{ article.like_count }}</span>
+    <span>{{ article.dislike_count }}</span>
+        <br>
+    <span>{{ article.release_time }}</span>
+        <a href="/edite_article/{{ article.aid }}">编辑</a>
+    <a href="/delete_article/{{ article.aid }}">删除</a>
+
+    </div>
+    {% endfor %}
+
+{% endblock %}
